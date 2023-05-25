@@ -1,0 +1,42 @@
+image: "ubuntu:22.04"
+
+variables:
+  GIT_STRATEGY: "clone"
+  GIT_SUBMODULE_STRATEGY: "recursive"
+
+before_script:
+ - |
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update -qq &&
+    apt-get install -qq \
+        bison \
+        build-essential \
+        curl \
+        dosfstools \
+        flex \
+        fuse \
+        genisoimage \
+        git \
+        gnupg \
+        libfuse-dev \
+        nasm \
+        parted \
+        pkg-config \
+        software-properties-common \
+        syslinux \
+        syslinux-utils \
+        texinfo \
+        wget &&
+    curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain none
+
+img:
+    script:
+     - |
+        source "$HOME/.cargo/env" &&
+        cargo install --version 0.1.1 cargo-config &&
+        cargo build --manifest-path installer/Cargo.toml --release &&
+        make ci-img IMG_TAG=$CI_COMMIT_REF_NAME REPO_BINARY=1
+    artifacts:
+        paths:
+         - build/img/
+        expire_in: 1 week

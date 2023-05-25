@@ -1,0 +1,54 @@
+FROM ubuntu:latest
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \        
+        autoconf \
+        automake \
+        autopoint \
+        bison \
+        build-essential \
+        ca-certificates \
+        cmake \
+        curl \
+        file \
+        flex \
+        fuse \
+        genisoimage \
+        git \
+        gperf \
+        libc6-dev-i386 \
+        libexpat-dev \
+        libfuse-dev \
+        libgmp-dev \
+        libhtml-parser-perl \
+        libtool \
+        libfontconfig1-dev \
+        libpng-dev
+        m4 \
+        nasm \
+        pkg-config \
+        po4a \
+        syslinux-utils \
+        texinfo \
+        ninja-build \
+        meson \
+        python3-mako \
+        xxd \
+        rsync \
+        wget \
+        python3 \
+		make \
+		xdg-utils \
+		zip \
+		unzip \
+		llvm \
+		clang \
+		perl \
+        doxygen
+
+# _UID_ must be replaced with the user's uid on host
+# podman root is mapped to your user id on host during build,
+# poduser is mapped to your user id during podman run
+RUN useradd --create-home --no-log-init --uid _UID_ poduser && \
+        chown -R root:root /home
+
